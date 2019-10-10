@@ -1,0 +1,26 @@
+{
+  "name": "@timemicro/di",
+  "version": "1.0.0",
+  "description": "di",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timemciro/di.git"
+  },
+  "keywords": [
+    "di"
+  ],
+  "author": "mattf",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/timemciro/di/issues"
+  },
+  "homepage": "https://github.com/timemciro/di#readme",
+  "devDependencies": {
+    "@types/mocha": "^5.2.7",
+    "mocha": "^6.2.1"
+  }
+}
