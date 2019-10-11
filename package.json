@@ -1,5 +1,5 @@
 {
-  "name": "@dukou/di",
+  "name": "@dukous/di",
   "version": "1.0.0",
   "description": "di",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/timemciro/di.git"
+    "url": "git+https://github.com/dukous/di.git"
   },
   "keywords": [
     "di",
@@ -24,9 +24,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/timemciro/di/issues"
+    "url": "https://github.com/dukous/di/issues"
   },
-  "homepage": "https://github.com/timemciro/di#readme",
+  "homepage": "https://github.com/dukous/di#readme",
   "devDependencies": {
     "@types/mocha": "^5.2.7",
     "mocha": "^6.2.1"
