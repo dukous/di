@@ -69,11 +69,7 @@ function removeServiceSlot(id, serviceStore) {
  * @return {string[]}
  */
 function dependentIds(rootId, currentId, idStore) {
-    if(idStore === undefined || idStore === null) {
-        idStore = {
-            __ids__: []
-        }
-    }
+    idStore = idStore ? idStore : { __ids__: [] };
     if(idStore[currentId]) {
         return idStore.__ids__;
     }
@@ -81,20 +77,14 @@ function dependentIds(rootId, currentId, idStore) {
     if(descriptor) {
         idStore[currentId] = 'start';
         idStore.__ids__.push(currentId);
-        if(descriptorStore[currentId].args) {
-            descriptorStore[currentId].args.forEach(arg => {
-                if(arg.ref) {
-                    dependentIds(rootId, arg.ref, idStore);
-                }
+        if(descriptor.args)
+            descriptor.args.forEach(arg => {
+                if(arg.ref) dependentIds(rootId, arg.ref, idStore);
             });
-        }
-        if(descriptorStore[currentId].props) {
-            descriptorStore[currentId].props.forEach(prop => {
-                if(prop.ref) {
-                    dependentIds(rootId, prop.ref, idStore);
-                }
+        if(descriptor.props)
+            descriptor.props.forEach(prop => {
+                if(prop.ref) dependentIds(rootId, prop.ref, idStore);
             });
-        }
         idStore[currentId] = 'end';
     }
     let ids = idStore.__ids__;
