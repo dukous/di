@@ -1,5 +1,5 @@
 {
-  "name": "@timemicro/di",
+  "name": "@mattf/di",
   "version": "1.0.0",
   "description": "di",
   "main": "index.js",
@@ -11,9 +11,15 @@
     "url": "git+https://github.com/timemciro/di.git"
   },
   "keywords": [
-    "di"
+    "di", "dependency", "inject"
   ],
   "author": "mattf",
+  "contributors": [
+    {
+      "name": "mattf",
+      "email": "matt.fang@live.cn"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/timemciro/di/issues"
