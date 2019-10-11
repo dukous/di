@@ -1,5 +1,5 @@
 {
-  "name": "@mattf/di",
+  "name": "@dukou/di",
   "version": "1.0.0",
   "description": "di",
   "main": "index.js",
@@ -11,7 +11,9 @@
     "url": "git+https://github.com/timemciro/di.git"
   },
   "keywords": [
-    "di", "dependency", "inject"
+    "di",
+    "dependency",
+    "inject"
   ],
   "author": "mattf",
   "contributors": [
