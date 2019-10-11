@@ -163,11 +163,113 @@ describe('test01', function () {
         console.log(DI.dependentIds('f'));
 
         console.info(DI.getService('a'));
-        console.info(DI.getService('b'));
-        console.info(DI.getService('c'));
-        console.info(DI.getService('d'));
-        console.info(DI.getService('e'));
-        console.info(DI.getService('f'));
+        //console.info(DI.getService('b'));
+        //console.info(DI.getService('c'));
+        //console.info(DI.getService('d'));
+        //console.info(DI.getService('e'));
+        //console.info(DI.getService('f'));
     });
+
+    it('getService', async function () {
+        class A {
+            constructor(b) {
+                this.id = Math.random();
+                this.b = b;
+            }
+        }
+
+        class B {
+            constructor(c) {
+                this.id = Math.random();
+                this.c = c;
+            }
+        }
+
+        class C {
+            constructor(d) {
+                this.id = Math.random();
+                this.d = d;
+            }
+        }
+
+        class D {
+            constructor() {
+                this.id = Math.random();
+            }
+        }
+
+        DI.setDescriptor('a', {
+            constructor: A,
+            single: false,
+            args:[
+                { ref: 'b' }
+            ]
+        });
+
+        DI.setDescriptor('b', {
+            constructor: B,
+            args:[
+                { ref: 'c' }
+            ]
+        });
+
+        DI.setDescriptor('c', {
+            single: false,
+            constructor: C,
+            args:[
+                { ref: 'd' }
+            ]
+        });
+
+        DI.setDescriptor('d', {
+            constructor: D
+        });
+
+        DI.startup();
+
+        console.log('request', JSON.stringify(DI.getService('a')));
+        console.log('request', JSON.stringify(DI.getService('a')));
+        console.log('request', JSON.stringify(DI.getService('a')));
+        console.log('---------------------------------');
+        console.log('---------------------------------');
+        console.log('single', JSON.stringify(DI.getService('b')));
+        console.log('single', JSON.stringify(DI.getService('b')));
+        console.log('single', JSON.stringify(DI.getService('b')));
+        console.log('---------------------------------');
+        console.log('---------------------------------');
+        console.log('request', JSON.stringify(DI.getService('c')));
+        console.log('request', JSON.stringify(DI.getService('c')));
+        console.log('request', JSON.stringify(DI.getService('c')));
+        console.log('---------------------------------');
+        console.log('---------------------------------');
+        console.log('single',JSON.stringify(DI.getService('d')));
+        console.log('single',JSON.stringify(DI.getService('d')));
+        console.log('single',JSON.stringify(DI.getService('d')));
+        console.log('---------------------------------');
+        console.log('---------------------------------');
+
+        console.log('-',Date.now());
+        for (let i=0;i<10000;i++) {
+            DI.getService('a');
+            DI.getService('a');
+        }
+        console.log('a', Date.now());
+        for (let i=0;i<10000;i++) {
+            DI.getService('b');
+            DI.getService('b');
+        }
+        console.log('b',Date.now());
+        for (let i=0;i<10000;i++) {
+            DI.getService('c');
+            DI.getService('c');
+        }
+        console.log('c',Date.now());
+        for (let i=0;i<10000;i++) {
+            DI.getService('d');
+            DI.getService('d');
+        }
+        console.log('d', Date.now());
+
+    }).timeout(60000);
 
 });

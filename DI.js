@@ -62,48 +62,43 @@ function removeServiceSlot(id, serviceStore) {
 }
 
 /**
- *
- * @param {string} id
- * @param {Object} [idStore]
+ * 获取依赖Ids
+ * @param {string} rootId - 根ID
+ * @param {string} currentId - 当前ID
+ * @param {Object} [idStore] - ID存储
+ * @return {string[]}
  */
-function dependentIds(id, idStore) {
+function dependentIds(rootId, currentId, idStore) {
     if(idStore === undefined || idStore === null) {
         idStore = {
             __ids__: []
         }
     }
-    if(idStore.__ids__.indexOf(id) >= 0) {
+    if(idStore[currentId]) {
         return idStore.__ids__;
     }
-    let descriptor = descriptorStore[id];
+    let descriptor = descriptorStore[currentId];
     if(descriptor) {
-        idStore[id] = 0;
-        idStore.__ids__.push(id);
-        if(descriptorStore[id].args) {
-            descriptorStore[id].args.forEach(arg => {
+        idStore[currentId] = 'start';
+        idStore.__ids__.push(currentId);
+        if(descriptorStore[currentId].args) {
+            descriptorStore[currentId].args.forEach(arg => {
                 if(arg.ref) {
-                    dependentIds(arg.ref, idStore);
+                    dependentIds(rootId, arg.ref, idStore);
                 }
             });
         }
-        if(descriptorStore[id].props) {
-            descriptorStore[id].props.forEach(prop => {
+        if(descriptorStore[currentId].props) {
+            descriptorStore[currentId].props.forEach(prop => {
                 if(prop.ref) {
-                    dependentIds(prop.ref, idStore);
+                    dependentIds(rootId, prop.ref, idStore);
                 }
             });
         }
-        idStore[id] = 1;
-    }
-    let finish = true;
-    for (let item of idStore.__ids__) {
-        if(idStore[item] === 0) {
-            finish = false;
-            break;
-        }
+        idStore[currentId] = 'end';
     }
     let ids = idStore.__ids__;
-    if(finish) {
+    if(rootId === currentId) {
         idStore = null;
     }
     return ids;
@@ -137,28 +132,29 @@ class DI {
         let descriptor = descriptorStore[id];
         if(descriptor) {
             if(descriptor.single)
-                return singleServiceStore[id];
-        } else {
-            return null;
-        }
+                return getService(id, singleServiceStore);
 
-        let requestServiceStore = {};
-        let ids = dependentIds(id);
-        ids.forEach(id => {
-            requestServiceStore[id] = createServiceSlot();
-        });
-        ids.forEach(id => {
-            let descriptor = descriptorStore[id];
-            if(descriptor.single) {
-                requestServiceStore[id] = getService(id, singleServiceStore);
-            } else {
-                setServiceSlot(id, requestServiceStore);
-            }
-        });
-        ids.forEach(id => {
-            removeServiceSlot(id, requestServiceStore);
-        });
-        return getService(id, requestServiceStore);
+            let requestServiceStore = {};
+            let ids = dependentIds(id, id);
+            ids.forEach(id => {
+                requestServiceStore[id] = createServiceSlot();
+            });
+            ids.forEach(id => {
+                let descriptor = descriptorStore[id];
+                if(descriptor.single) {
+                    requestServiceStore[id] = getService(id, singleServiceStore);
+                } else {
+                    setServiceSlot(id, requestServiceStore);
+                }
+            });
+            ids.forEach(id => {
+                removeServiceSlot(id, requestServiceStore);
+            });
+            let service = getService(id, requestServiceStore);
+            requestServiceStore = null;
+            return service;
+        }
+        return null;
     }
 
     /**
@@ -185,8 +181,13 @@ class DI {
         });
     }
 
-    static dependentIds(id) {
-        return dependentIds(id);
+    /**
+     *
+     * @param {string} rootId - 根ID
+     * @return {string[]}
+     */
+    static dependentIds(rootId) {
+        return dependentIds(rootId, rootId);
     }
 }
 
