@@ -248,6 +248,11 @@ describe('test01', function () {
         console.log('---------------------------------');
         console.log('---------------------------------');
 
+        console.log(DI.dependentIds('a'));
+        console.log(DI.dependentIds('b'));
+        console.log(DI.dependentIds('c'));
+        console.log(DI.dependentIds('d'));
+
         console.log('-',Date.now());
         for (let i=0;i<10000;i++) {
             DI.getService('a');

@@ -1,6 +1,6 @@
 {
   "name": "@dukous/di",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "di",
   "main": "index.js",
   "scripts": {

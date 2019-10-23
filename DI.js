@@ -12,6 +12,11 @@ let descriptorStore = {};
 let singleServiceStore = {};
 
 /**
+ * 依赖Id存储
+ */
+let dependentIdStore = {};
+
+/**
  * 获取服务
  * @param id
  * @param serviceStore
@@ -125,7 +130,7 @@ class DI {
                 return getService(id, singleServiceStore);
 
             let requestServiceStore = {};
-            let ids = dependentIds(id, id);
+            let ids = dependentIdStore[id];
             ids.forEach(id => {
                 requestServiceStore[id] = createServiceSlot();
             });
@@ -169,6 +174,9 @@ class DI {
         keys.forEach(id => {
             removeServiceSlot(id, singleServiceStore);
         });
+        keys.forEach(id => {
+            dependentIdStore[id] = dependentIds(id, id);
+        });
     }
 
     /**
@@ -177,7 +185,7 @@ class DI {
      * @return {string[]}
      */
     static dependentIds(rootId) {
-        return dependentIds(rootId, rootId);
+        return dependentIdStore[rootId];
     }
 }
 
